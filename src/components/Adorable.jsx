@@ -10,10 +10,11 @@ const Adorable = () => {
   const [eyesArr, setEyesArr] = useState([])
   const [noseArr, setNoseArr] = useState([])
   const [mouthArr, setMouthArr] = useState([])
-  const [hex, setHex] = useState('1B5AE1')
-  const [hue, setHue] = useState(218)
-  const [saturation, setSaturation] = useState(77)
-  const [lightness, setLightness] = useState(54)
+  const [hex, setHex] = useState('')
+  const [hue, setHue] = useState(Math.ceil(Math.random() * 360))
+  const [saturation, setSaturation] = useState(Math.ceil(Math.random() * 100))
+  const [lightness, setLightness] = useState(Math.ceil(Math.random() * 100))
+  const [hide, setHide] = useState(' hide')
 
   useEffect(() => {
     const url = `https://api.adorable.io/avatars/face/${eyesArr[eyes]}/${noseArr[nose]}/${mouthArr[mouth]}/${hex}`
@@ -28,6 +29,10 @@ const Adorable = () => {
     setEyesArr(apiData.face.eyes)
     setNoseArr(apiData.face.nose)
     setMouthArr(apiData.face.mouth)
+
+    setEyes(Math.floor(Math.random() * apiData.face.eyes.length))
+    setMouth(Math.floor(Math.random() * apiData.face.mouth.length))
+    setNose(Math.floor(Math.random() * apiData.face.nose.length))
   }
 
   const HSLToHex = (h, s, l) => {
@@ -85,10 +90,13 @@ const Adorable = () => {
   }, [])
 
   useEffect(() => {
-    console.log({ hue, saturation, lightness })
     setHex(HSLToHex(hue, saturation, lightness))
-    console.log(hex)
   }, [hue, saturation, lightness])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {}, 750)
+    setHide('')
+  }, [url])
 
   return (
     <>
@@ -96,7 +104,7 @@ const Adorable = () => {
         <h3 className="center-align">Adorable Avatar Selector</h3>
         <div className="row">
           <div className="col s6 offset-s3">
-            <main className="card">
+            <main className={`card${hide}`}>
               <section className="card-image">
                 <img src={url} alt="" />
               </section>
