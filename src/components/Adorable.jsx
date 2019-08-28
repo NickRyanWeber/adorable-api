@@ -1,13 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import M from 'materialize-css'
+import axios from 'axios'
 
 const Adorable = () => {
   const [mouth, setMouth] = useState(1)
   const [eyes, setEyes] = useState(1)
   const [nose, setNose] = useState(1)
   let URL = `https://api.adorable.io/avatars/face/eyes${eyes}/nose${nose}/mouth${mouth}/1B5AE1`
+
+  let apiData = {}
+
+  const fetchData = async () => {
+    const resp = await axios.get(
+      `https://api.allorigins.win/get?url=https://api.adorable.io/avatars/list`
+    )
+    // console.log(JSON.parse(resp.data.contents))
+    apiData = JSON.parse(resp.data.contents)
+    console.log(apiData.face.eyes)
+  }
+
   useEffect(() => {
     M.AutoInit()
+    fetchData()
   }, [])
 
   return (
