@@ -16,11 +16,13 @@ const Adorable = () => {
   const [lightness, setLightness] = useState(Math.ceil(Math.random() * 100))
   const [hide, setHide] = useState(' hide')
 
+  // Whenever a URL parameter is updated, run the API call and get a new avatar
   useEffect(() => {
     const url = `https://api.adorable.io/avatars/face/${eyesArr[eyes]}/${noseArr[nose]}/${mouthArr[mouth]}/${hex}`
     setUrl(url)
   }, [mouth, eyes, nose, hex])
 
+  // Gets the list of how many mouth, nose, and eye options there are then sets a random starting value for each
   const fetchData = async () => {
     const resp = await axios.get(
       `https://api.allorigins.win/get?url=https://api.adorable.io/avatars/list`
@@ -35,6 +37,7 @@ const Adorable = () => {
     setNose(Math.floor(Math.random() * apiData.face.nose.length))
   }
 
+  // HSL to HEX conversion found online
   const HSLToHex = (h, s, l) => {
     s /= 100
     l /= 100
@@ -84,15 +87,18 @@ const Adorable = () => {
     return r + g + b
   }
 
+  // When the page loads, grab the API Data
   useEffect(() => {
     M.AutoInit()
     fetchData()
   }, [])
 
+  // Whenever the HSL is updated, run the HSL to HEX conversion
   useEffect(() => {
     setHex(HSLToHex(hue, saturation, lightness))
   }, [hue, saturation, lightness])
 
+  // Adds a small delay on page-load to minimize the "jump" that happens when the original image is replaced by the random one
   useEffect(() => {
     const timer = setTimeout(() => {}, 750)
     setHide('')
